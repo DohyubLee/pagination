@@ -2,13 +2,10 @@ import React, {Component} from 'react';
 import './Page.scss';
 
 class Page extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            pager: {
-                init: 1
-            } //페이징하기위한 데이터
-        }
+    state ={
+        pager: {
+            init: 1
+        } //페이징하기위한 데이터
     }
 
     componentWillReceiveProps(nextProps) {
@@ -21,14 +18,11 @@ class Page extends Component {
     setPage = (page, propsData) => {
         let {items, pageSize} = propsData;
         let pager = this.state.pager;
-        // console.log("pager :", pager);
         if (page < 1 || page > pager.totalPages) {
             return;
         }
         pager = this.getPager(items.length, page, pageSize);
-        // console.log("pager2 :", pager);
         let pageOfItems = items.slice(pager.startIndex, pager.endIndex + 1);
-        // console.log("pageOfItems :", pageOfItems);
         this.setState({
             pager: pager
         });
@@ -54,7 +48,6 @@ class Page extends Component {
         }
         let startIndex = (currentPage - 1) * pageSize;
         let endIndex = Math.min(startIndex + pageSize - 1, totalItemsLength - 1);
-        // console.log("endIndex :", endIndex)
         let pages = [...Array(endPage + 1 - startPage).keys()].map(i => startPage + i);
         return {
             totalItemsLength, //전체 개수
@@ -70,9 +63,7 @@ class Page extends Component {
     }
 
     render() {
-        // console.log("props :", this.props)
         const pager = this.state.pager;
-        console.log("state :", this.state)
         return (
             <div className="pagination">
                 <ul className="pages-box">

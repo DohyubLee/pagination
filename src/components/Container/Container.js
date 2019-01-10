@@ -3,16 +3,15 @@ import './Container.scss';
 import Page from '../Page';
 
 class Container extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            exampleItems: [],
-            pageOfItems: [] //현재 페이지에 출력될 리스트
-        }
+    state = {
+        exampleItems: [],
+        pageOfItems: [] //현재 페이지에 출력될 리스트
     }
+
     componentDidMount() {
         this.setAPIData()
     }
+
     setAPIData = async () => {
         let data = await this.callAPIData();
         this.setState({
@@ -30,7 +29,6 @@ class Container extends Component {
     };
 
     render() {
-        // console.log("pageOfItems :", this.state.pageOfItems)
         return (
             <div className="container">
                 <div className="upper">
@@ -38,7 +36,7 @@ class Container extends Component {
                 </div>
                 <div className="item_list">
                     {this.state.pageOfItems.map(item => (
-                        <div key={item.id}> {item.name} </div>
+                        <div key={item.id}> {item.id + " : " + item.name} </div>
                     ))}
                 </div>
                 <Page items={this.state.exampleItems} onChangePage={this.onChangePage}/>
