@@ -5,18 +5,24 @@ import Page from '../Page';
 class Container extends Component {
     constructor(props) {
         super(props);
-        let exampleItems = [...new Array(100).keys()].map(i => {
-            return {
-                id: i + 1,
-                name: "Item " + (i + 1)
-            }
-        })
         this.state = {
-            exampleItems,
+            exampleItems: [],
             pageOfItems: [] //현재 페이지에 출력될 리스트
         }
     }
-
+    componentDidMount() {
+        this.setAPIData()
+    }
+    setAPIData = async () => {
+        let data = await this.callAPIData();
+        this.setState({
+            exampleItems: data
+        })
+    }
+    callAPIData = () => {
+        return fetch('https://jsonplaceholder.typicode.com/comments')
+            .then(response => response.json())
+    }
     onChangePage = pageOfItems => {
         this.setState({
             pageOfItems

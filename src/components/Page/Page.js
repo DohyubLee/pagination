@@ -5,20 +5,21 @@ class Page extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            pager: {} //페이징하기위한 데이터
+            pager: {
+                init: 1
+            } //페이징하기위한 데이터
         }
     }
 
-    componentWillMount() {
-        // console.log("componentWillMount")
-        if (this.props.items) {
-            this.setPage(this.props.initialPage);
+    componentWillReceiveProps(nextProps) {
+        if (this.props.items.length !== nextProps.items.length) {
+            this.setPage(this.props.initialPage, nextProps);
         }
     }
 
     // 이동할 페이지 넘버가 인자로 전달됨
-    setPage = (page) => {
-        let {items, pageSize} = this.props;
+    setPage = (page, propsData) => {
+        let {items, pageSize} = propsData;
         let pager = this.state.pager;
         // console.log("pager :", pager);
         if (page < 1 || page > pager.totalPages) {
@@ -28,7 +29,9 @@ class Page extends Component {
         // console.log("pager2 :", pager);
         let pageOfItems = items.slice(pager.startIndex, pager.endIndex + 1);
         // console.log("pageOfItems :", pageOfItems);
-        this.setState({pager: pager});
+        this.setState({
+            pager: pager
+        });
         this.props.onChangePage(pageOfItems);
     }
     getPager = (totalItemsLength, currentPage, pageSize) => {
@@ -74,31 +77,31 @@ class Page extends Component {
             <div className="pagination">
                 <ul className="pages-box">
                     <li className="page-box" onClick={() => {
-                        this.setPage(1)
+                        this.setPage(1, this.props)
                     }}>
                         <a>First</a>
                     </li>
                     <li className="page-box" onClick={() => {
-                        this.setPage(pager.currentPage - 1)
+                        this.setPage(pager.currentPage - 1, this.props)
                     }}>
                         <a>Prev</a>
                     </li>
-                    {pager.pages.map((page, index) => {
+                    {pager.init ? null : pager.pages.map((page, index) => {
                         return (
                             <li className="page-box" key={index} onClick={() => {
-                                this.setPage(page)
+                                this.setPage(page, this.props)
                             }}>
                                 <a className={pager.currentPage === page ? "active" : ""}>{page}</a>
                             </li>
                         )
                     })}
                     <li className="page-box" onClick={() => {
-                        this.setPage(pager.currentPage + 1)
+                        this.setPage(pager.currentPage + 1, this.props)
                     }}>
                         <a>Next</a>
                     </li>
                     <li className="page-box" onClick={() => {
-                        this.setPage(pager.totalPages)
+                        this.setPage(pager.totalPages, this.props)
                     }}>
                         <a>Last</a>
                     </li>
